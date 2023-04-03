@@ -33,7 +33,9 @@ const BlogSection = ({blogs, user,handleDelete}) => {
                             <Link to = {`/update/${item.id}`}>update</Link> 
                         </div>
                     )}
-
+                    <div>
+                        
+                    </div>
                                            
                 </div>
         ))}
@@ -42,3 +44,5 @@ const BlogSection = ({blogs, user,handleDelete}) => {
 }
 
 export default BlogSection;
+
+//{user && <LikeArticle id= {item.id} likes = {item.likes} />}

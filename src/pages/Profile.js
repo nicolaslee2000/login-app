@@ -5,8 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Avatar from '@mui/material/Avatar';
 
 
-export default function Profile() {
-    const currentUser = UserAuth();
+export default function Profile({user}) {
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/5/59/User-avatar.svg"); 
@@ -18,7 +17,7 @@ export default function Profile() {
     } ;  
     const handleClick =() => {
        const imageRef = ref(storage,"image");
-       uploadBytes(imageRef, image).then(() => {
+        uploadBytes(imageRef, image).then(() => {
         getDownloadURL(imageRef).then(() => {
             setPhotoURL(photoURL);
         }).catch(error => {
@@ -27,20 +26,13 @@ export default function Profile() {
         setImage(null);
        })
     } 
-/*
-    useEffect(() => {
-        if(currentUser?.photoURL) { //currentUser && currentUser.photoURL
-            setPhotoURL(currentUser.photoURL);
-        }
-    },[currentUser])
-*/
-    
 
     return (
         <div>
+            <Avatar src={photoURL} alt="Avatar" />
             <input type='file' onChange={handleChange}></input>
             <button disabled ={loading || !image} onClick={handleClick}>Upload</button>
-            <Avatar src={photoURL} alt="Avatar" />
+            
         </div>
     );
 }

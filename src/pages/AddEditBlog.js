@@ -12,16 +12,15 @@ const initialState = {
     title: '',
     tags: [],
     category: '',
-    description: ''
+    description: '',
+    likes: [],
+    comments: []
 }
 
 const categoryOption = [
-    "Fashion",
-    "Technology",
-    "Food",
-    "Politics",
-    "Sports",
-    "Business",
+    "Jobs",
+    "Uni",
+    "Event"
 ];
 
 const AddEditBlog = () => {
@@ -34,7 +33,7 @@ const AddEditBlog = () => {
     
     const {id} = useParams();
 
-    const {title, tags, category, description} = form;
+    const {title, tags, category, description } = form;
 
     useEffect(() => {
         const uploadFile = () => {
@@ -47,7 +46,7 @@ const AddEditBlog = () => {
                 setProgress(progress);
                 switch (snapshot.state) {
                     case "paused":
-                        console.log("Upload is puased");
+                        console.log("Upload is paused");
                             break;
                     case "running":
                         console.log("Upload is running");

@@ -71,7 +71,7 @@ const Header = () => {
       </nav>
       {/* <Contacts> */}
       {user?.displayName ? (
-        <button onClick={handleSignOut}>Log Out</button>
+        <Button onClick={handleSignOut} text="Log Out" />
       ) : (
         <LoginButton />
       )}

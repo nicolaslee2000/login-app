@@ -171,7 +171,7 @@ const AddEditBlog = () => {
                     />
                 </div>
                 <div>
-                    <input type="file" className = "form-control" onChange = {(e) => setFile(e.target.files[0])}/>
+                    <input type="file" onChange = {(e) => setFile(e.target.files[0])}/>
                 </div>
                 <div>
                     <button type="submit" disabled ={progress != null && progress < 100}>

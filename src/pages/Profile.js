@@ -1,38 +1,46 @@
-import { UserAuth } from "../context/AuthContext";
-import { useEffect,useState } from "react";
-import { upload, storage } from "../firebase-config";
+
+import {useState } from "react";
+import { db, storage } from "../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Avatar from '@mui/material/Avatar';
+import { Avatar, TextField } from "@material-ui/core";
+import { UserAuth } from "../context/AuthContext";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { serverTimestamp, addDoc, updateDoc, collection } from 'firebase/firestore';
 
+export default function Profile() {
+    const user = UserAuth();
+    const [name, setName] = useState(user?.displayName)
+    const [file, setFile] = useState(null)
+    const [photoURL, setPhotoURL] = useState(user?.photoURL)
 
-export default function Profile({user}) {
-    const [image, setImage] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/5/59/User-avatar.svg"); 
- 
     const handleChange = (e) => {
-        if(e.target.files[0]) {
-            setImage(e.target.files[0])
+        const file = e.target.files[0]
+        if(file) {
+            setFile(file)
+            setPhotoURL(URL.createObjectURL(file))
         }
-    } ;  
-    const handleClick =() => {
-       const imageRef = ref(storage,"image");
-        uploadBytes(imageRef, image).then(() => {
-        getDownloadURL(imageRef).then(() => {
-            setPhotoURL(photoURL);
-        }).catch(error => {
-            console.log(error.message, "error getting the image url")
-        })
-        setImage(null);
-       })
-    } 
+    }
 
     return (
-        <div>
-            <Avatar src={photoURL} alt="Avatar" />
-            <input type='file' onChange={handleChange}></input>
-            <button disabled ={loading || !image} onClick={handleClick}>Upload</button>
-            
-        </div>
-    );
+        <form>
+            <TextField
+            value={name || ""}
+            required
+            onChange={(e) => setName(e.target.value)}
+            />
+            <label htmlFor="profilePhoto">
+                <input 
+                accept="image/*"
+                id = "profilePhoto"
+                type="file"
+                style= {{display:"none"}}
+                onChange={handleChange}
+                 />
+                <Avatar
+                src={photoURL}
+                />
+            </label>
+        </form>
+    )
 }

@@ -4,6 +4,7 @@ import { db, storage } from "../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Avatar, TextField } from "@material-ui/core";
 import { UserAuth } from "../context/AuthContext";
+import {v4 as uuidv4} from 'uuid'
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { serverTimestamp, addDoc, updateDoc, collection } from 'firebase/firestore';
@@ -22,8 +23,22 @@ export default function Profile() {
         }
     }
 
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+
+        let userObj = {displayName : name}
+        let imagesObj = {uName : name}
+        try {
+            if(file) {
+                const imageName = uuidv4() + "." + file?.name?.split(".")?.pop
+            }
+        } catch (error) {
+
+        }
+    }
+
     return (
-        <form>
+        <form onSubmit= {handleSubmit}>
             <TextField
             value={name || ""}
             required

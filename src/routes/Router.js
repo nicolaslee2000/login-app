@@ -21,25 +21,26 @@ const Signin = lazy(() => import("../pages/Signin.jsx"));
 
 const Notice = lazy(() => import("../pages/Notice.js"));
 
-const Details = lazy(() => import ('../pages/Details'));
+const Account = lazy(() => import('../pages/Account'));
 
-const Account = lazy(() => import("../pages/Account"));
 
 const Router = () => {
   const { user } = UserAuth();
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <Suspense fallback={<Spinner />}>
-          <Routes>
-                <Route path="/" element={<Layout />}>
+        <BrowserRouter>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route
+                path='/'
+                element={<Layout />}
+              >
+                
                 <Route index element={<MainPage />} exact />
                 <Route path='aboutus' element={<AboutUs />} />
                 <Route path='notice' element={<Notice />} />
                 <Route path='login' element={<Signin />} />
-                <Route path='post' element={<Post user= {user}/>} />
-                <Route path='detail/:id' element= {<Details user={user}/>}/>
-                <Route path='/update/:id' element={user?.uid ? <AddEditBlog/> : <Navigate to="/"/>} />
+                <Route path='post' element={<Post />} />
                 <Route path='forum' element={user?.uid ? <AddEditBlog /> : <Navigate to="/"/>} />
                 <Route path='account' 
                 element={
@@ -58,3 +59,4 @@ const Router = () => {
 };
 
 export default Router;
+

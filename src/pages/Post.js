@@ -2,8 +2,10 @@ import React, {useState,useEffect} from 'react';
 import { onSnapshot, collection } from "firebase/firestore";
 import BlogSection from '../components/BlogSection';
 import {db} from '../firebase-config';
+import {deleteDoc, doc} from "firebase/firestore";
+import { toast } from 'react-toastify';
 
-const Post = () => {
+const Post = (user) => {
     const [loading, setLoading] = useState(true);
     const [blogs, setBlogs] = useState([]);
 
@@ -16,6 +18,7 @@ const Post = () => {
                     list.push({id: doc.id, ...doc.data()})
                 });
                 setBlogs(list);
+                setLoading(false);
             }, (error) => {
                 console.log(error)
             }
@@ -26,13 +29,25 @@ const Post = () => {
         }
     }, []);
 
-    console.log("blogs", blogs);
+    const handleDelete = async (id) => {
+        if(window.confirm("deleted?")) {
+            try {
+                setLoading(true);
+                await deleteDoc(doc(db, "blogs",id));
+                toast.success("blog deleted successfully");
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
 
     return ( 
         <div>
         <h2> Blog</h2>
-        <div></div>
-        <BlogSection blogs = {blogs}/>
+            <BlogSection blogs = {blogs}
+            user = {user}
+            handleDelete = {handleDelete}/>
         </div>
     )
 }

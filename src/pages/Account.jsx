@@ -20,7 +20,7 @@ const Account = () => {
                 <p>Welcome, {user?.displayName}</p>
             </div>
             <button onClick={handleSignOut}>LogOut</button>
-            {user && <Profile />}
+            {user && <Profile user={user}/>}
         </div>
     )
 };

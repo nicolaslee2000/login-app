@@ -21,34 +21,34 @@ const Signin = lazy(() => import("../pages/Signin.jsx"));
 
 const Notice = lazy(() => import("../pages/Notice.js"));
 
-const Account = lazy(() => import("../pages/Account"));
+const Account = lazy(() => import('../pages/Account'));
+
 
 const Router = () => {
   const { user } = UserAuth();
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <Suspense fallback={<Spinner />}>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<MainPage />} exact />
-              <Route path="aboutus" element={<AboutUs />} />
-              <Route path="notice" element={<Notice />} />
-              <Route path="login" element={<Signin />} />
-              <Route path="post" element={<Post />} />
+        <BrowserRouter>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
               <Route
-                path="forum"
-                element={user?.uid ? <AddEditBlog /> : <Navigate to="/" />}
-              />
-              <Route
-                path="account"
+                path='/'
+                element={<Layout />}
+              >
+                
+                <Route index element={<MainPage />} exact />
+                <Route path='aboutus' element={<AboutUs />} />
+                <Route path='notice' element={<Notice />} />
+                <Route path='login' element={<Signin />} />
+                <Route path='post' element={<Post />} />
+                <Route path='forum' element={user?.uid ? <AddEditBlog /> : <Navigate to="/"/>} />
+                <Route path='account' 
                 element={
-                  <Protected>
-                    <Account />
-                  </Protected>
-                }
-              />
-            </Route>
+                <Protected>
+                    <Account /> 
+                </Protected>} 
+                />
+              </Route>
             {/* no matching route */}
             <Route path="*" element={<ErrorPage text={"Page not found!"} />} />
           </Routes>
@@ -59,3 +59,4 @@ const Router = () => {
 };
 
 export default Router;
+

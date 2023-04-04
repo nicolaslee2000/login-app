@@ -1,46 +1,61 @@
-import { UserAuth } from "../context/AuthContext";
-import { useEffect,useState } from "react";
-import { upload, storage } from "../firebase-config";
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import Avatar from '@mui/material/Avatar';
 
+import {useState } from "react";
+import { db, storage } from "../firebase-config";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Avatar, TextField } from "@material-ui/core";
+import { UserAuth } from "../context/AuthContext";
+import {v4 as uuidv4} from 'uuid'
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { serverTimestamp, addDoc, updateDoc, collection } from 'firebase/firestore';
 
 export default function Profile() {
-    const currentUser = UserAuth();
-    const [image, setImage] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/5/59/User-avatar.svg"); 
- 
+    const user = UserAuth();
+    const [name, setName] = useState(user?.displayName)
+    const [file, setFile] = useState(null)
+    const [photoURL, setPhotoURL] = useState(user?.photoURL)
+
     const handleChange = (e) => {
-        if(e.target.files[0]) {
-            setImage(e.target.files[0])
+        const file = e.target.files[0]
+        if(file) {
+            setFile(file)
+            setPhotoURL(URL.createObjectURL(file))
         }
-    } ;  
-    const handleClick =() => {
-       const imageRef = ref(storage,"image");
-       uploadBytes(imageRef, image).then(() => {
-        getDownloadURL(imageRef).then(() => {
-            setPhotoURL(photoURL);
-        }).catch(error => {
-            console.log(error.message, "error getting the image url")
-        })
-        setImage(null);
-       })
-    } 
-/*
-    useEffect(() => {
-        if(currentUser?.photoURL) { //currentUser && currentUser.photoURL
-            setPhotoURL(currentUser.photoURL);
+    }
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+
+        let userObj = {displayName : name}
+        let imagesObj = {uName : name}
+        try {
+            if(file) {
+                const imageName = uuidv4() + "." + file?.name?.split(".")?.pop
+            }
+        } catch (error) {
+
         }
-    },[currentUser])
-*/
-    
+    }
 
     return (
-        <div>
-            <input type='file' onChange={handleChange}></input>
-            <button disabled ={loading || !image} onClick={handleClick}>Upload</button>
-            <Avatar src={photoURL} alt="Avatar" />
-        </div>
-    );
+        <form onSubmit= {handleSubmit}>
+            <TextField
+            value={name || ""}
+            required
+            onChange={(e) => setName(e.target.value)}
+            />
+            <label htmlFor="profilePhoto">
+                <input 
+                accept="image/*"
+                id = "profilePhoto"
+                type="file"
+                style= {{display:"none"}}
+                onChange={handleChange}
+                 />
+                <Avatar
+                src={photoURL}
+                />
+            </label>
+        </form>
+    )
 }

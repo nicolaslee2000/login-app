@@ -18,6 +18,7 @@ const Account = () => {
             <h1>Account</h1>
             <div>
                 <p>Welcome, {user?.displayName}</p>
+                <p>your degree is {user?.degree}</p>
             </div>
             <button onClick={handleSignOut}>LogOut</button>
             {user && <Profile user={user}/>}
